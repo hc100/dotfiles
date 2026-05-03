@@ -1,0 +1,64 @@
+#!/bin/sh
+set -eu
+
+usage() {
+  cat <<'EOF'
+Usage:
+  DOTFILES_SSH_CONFIG_REF='op://VAULT/ITEM/FIELD' bootstrap-ssh-config
+
+Example:
+  DOTFILES_SSH_CONFIG_REF='op://Private/dotfiles-ssh-config/notesPlain' bootstrap-ssh-config
+
+The referenced 1Password field or note body should contain the full contents of ~/.ssh/config.
+EOF
+}
+
+if [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
+  usage
+  exit 0
+fi
+
+if [ -z "${DOTFILES_SSH_CONFIG_REF:-}" ]; then
+  usage >&2
+  echo >&2
+  echo "error: DOTFILES_SSH_CONFIG_REF is required" >&2
+  exit 2
+fi
+
+if ! command -v op >/dev/null 2>&1; then
+  echo "error: 1Password CLI 'op' is not installed or not in PATH" >&2
+  exit 127
+fi
+
+ssh_dir="${HOME}/.ssh"
+target="${ssh_dir}/config"
+tmp="${target}.tmp.$$"
+backup="${target}.backup.$(date +%Y%m%d%H%M%S)"
+
+mkdir -p "${ssh_dir}"
+chmod 700 "${ssh_dir}"
+
+umask 077
+if ! op read "${DOTFILES_SSH_CONFIG_REF}" > "${tmp}"; then
+  rm -f "${tmp}"
+  echo >&2
+  echo "error: failed to read SSH config from 1Password" >&2
+  echo "hint: run 'op signin', then verify the reference with:" >&2
+  echo "      op read '${DOTFILES_SSH_CONFIG_REF}' | head" >&2
+  exit 1
+fi
+
+if [ ! -s "${tmp}" ]; then
+  rm -f "${tmp}"
+  echo "error: 1Password returned an empty SSH config" >&2
+  exit 1
+fi
+
+if [ -e "${target}" ] && [ ! -L "${target}" ]; then
+  cp -p "${target}" "${backup}"
+  echo "backed up existing SSH config to ${backup}"
+fi
+
+mv "${tmp}" "${target}"
+chmod 600 "${target}"
+echo "installed ${target}"
