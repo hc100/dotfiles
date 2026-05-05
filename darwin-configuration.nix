@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   nix = {
@@ -24,7 +24,7 @@
   };
 
   system = {
-    primaryUser = "k-ozaki";
+    primaryUser = username;
     stateVersion = 6;
 
     defaults = {

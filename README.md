@@ -67,6 +67,17 @@ cd dotfiles
 sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake "path:$PWD#hc100-macbook"
 ```
 
+Use the configuration that matches the local macOS user:
+
+- `hc100-macbook`: personal Mac, user `k-ozaki`
+- `work-macbook`: work Mac, user `ozaki-kyoichi`
+
+For the work Mac:
+
+```sh
+sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake "path:$PWD#work-macbook"
+```
+
 If activation stops with `Unexpected files in /etc` for `/etc/bashrc` or
 `/etc/zshrc`, move those files aside and retry. This is nix-darwin refusing to
 overwrite pre-existing system shell files without an explicit backup.

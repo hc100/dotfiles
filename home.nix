@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 {
   imports = [
@@ -11,8 +11,8 @@
   ];
 
   home = {
-    username = "k-ozaki";
-    homeDirectory = "/Users/k-ozaki";
+    inherit username;
+    homeDirectory = "/Users/${username}";
     stateVersion = "25.05";
 
     sessionVariables = {

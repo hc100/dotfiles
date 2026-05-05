@@ -26,25 +26,47 @@
     }:
     let
       system = "aarch64-darwin";
-      username = "k-ozaki";
-      hostname = "hc100-macbook";
+
+      mkDarwinConfiguration =
+        {
+          hostname,
+          username,
+        }:
+        nix-darwin.lib.darwinSystem {
+          inherit system;
+
+          specialArgs = {
+            inherit username;
+          };
+
+          modules = [
+            ./darwin-configuration.nix
+            home-manager.darwinModules.home-manager
+            {
+              users.users.${username}.home = "/Users/${username}";
+
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "before-home-manager";
+              home-manager.extraSpecialArgs = {
+                inherit username;
+              };
+              home-manager.users.${username} = import ./home.nix;
+            }
+          ];
+        };
     in
     {
-      darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
-        inherit system;
+      darwinConfigurations = {
+        hc100-macbook = mkDarwinConfiguration {
+          hostname = "hc100-macbook";
+          username = "k-ozaki";
+        };
 
-        modules = [
-          ./darwin-configuration.nix
-          home-manager.darwinModules.home-manager
-          {
-            users.users.${username}.home = "/Users/${username}";
-
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "before-home-manager";
-            home-manager.users.${username} = import ./home.nix;
-          }
-        ];
+        work-macbook = mkDarwinConfiguration {
+          hostname = "work-macbook";
+          username = "ozaki-kyoichi";
+        };
       };
     };
 }
