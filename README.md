@@ -57,13 +57,14 @@ xcode-select --install
 sh <(curl -L https://nixos.org/nix/install)
 ```
 
-Open a new shell after installing Nix, then run the first switch through `nix`.
-`darwin-rebuild` is not available until after the first successful switch.
+Run the first switch through Nix's absolute path. `darwin-rebuild` is not
+available until after the first successful switch, and `sudo nix ...` can fail
+on a fresh install because `sudo` may not inherit the user shell `PATH`.
 
 ```sh
 git clone https://github.com/hc100/dotfiles.git
 cd dotfiles
-sudo nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake "path:$PWD#hc100-macbook"
+sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake "path:$PWD#hc100-macbook"
 ```
 
 If activation stops with `Unexpected files in /etc` for `/etc/bashrc` or
@@ -73,7 +74,7 @@ overwrite pre-existing system shell files without an explicit backup.
 ```sh
 sudo mv /etc/bashrc /etc/bashrc.before-nix-darwin
 sudo mv /etc/zshrc /etc/zshrc.before-nix-darwin
-sudo nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake "path:$PWD#hc100-macbook"
+sudo /nix/var/nix/profiles/default/bin/nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake "path:$PWD#hc100-macbook"
 ```
 
 After signing in to 1Password, restore the private SSH config:
