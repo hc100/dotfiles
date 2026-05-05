@@ -40,7 +40,9 @@ in
     gopls
     goimportsOnly
     intelephense
+    moralerspace-hwjpdoc
     nil
+    noto-fonts-color-emoji
     prettier
     rust-analyzer
     typescript

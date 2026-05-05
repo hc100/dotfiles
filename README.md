@@ -28,6 +28,9 @@ including Copilot Language Server, Intelephense, gopls, rust-analyzer,
 typescript-language-server, vscode-langservers-extracted, eslint_d, prettier,
 goimports, and nil.
 
+The fonts referenced by the Emacs UI configuration are also managed by Home
+Manager: Moralerspace HWJPDOC and Noto Color Emoji.
+
 ## Zsh
 
 Home Manager manages zsh, oh-my-zsh, and Powerlevel10k. The Powerlevel10k
