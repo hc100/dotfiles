@@ -57,6 +57,9 @@ Managed casks:
 
 - `xykong/tap/flux-markdown`
 
+Custom Homebrew taps are pinned through flake inputs via `nix-homebrew`, so tap
+resolution does not depend on manual `brew tap` state.
+
 ## First Setup
 
 On a new Mac, install Xcode Command Line Tools and Nix first. Clone with HTTPS

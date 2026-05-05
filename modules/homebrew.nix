@@ -10,12 +10,8 @@
       upgrade = false;
     };
 
-    taps = [
-      "xykong/tap"
-    ];
-
     casks = [
-      "flux-markdown"
+      "xykong/tap/flux-markdown"
     ];
   };
 }

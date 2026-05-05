@@ -14,6 +14,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
+    xykong-tap = {
+      url = "github:xykong/homebrew-tap";
+      flake = false;
+    };
+
   };
 
   outputs =
@@ -22,6 +29,8 @@
       nixpkgs,
       home-manager,
       nix-darwin,
+      nix-homebrew,
+      xykong-tap,
       ...
     }:
     let
@@ -41,9 +50,20 @@
 
           modules = [
             ./darwin-configuration.nix
+            nix-homebrew.darwinModules.nix-homebrew
             home-manager.darwinModules.home-manager
             {
               users.users.${username}.home = "/Users/${username}";
+
+              nix-homebrew = {
+                enable = true;
+                enableRosetta = true;
+                user = username;
+                autoMigrate = true;
+                taps = {
+                  "xykong/homebrew-tap" = xykong-tap;
+                };
+              };
 
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
