@@ -97,7 +97,24 @@
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
+        "typewhisper-tap": "typewhisper-tap",
         "xykong-tap": "xykong-tap"
+      }
+    },
+    "typewhisper-tap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777899791,
+        "narHash": "sha256-htkpJG7hQhRbEjJVwXBxTztPQcCUEtq3jVb+xtPobKs=",
+        "owner": "TypeWhisper",
+        "repo": "homebrew-tap",
+        "rev": "7f721454efe8c7cba5246dfec6f3e7df8ed97288",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TypeWhisper",
+        "repo": "homebrew-tap",
+        "type": "github"
       }
     },
     "xykong-tap": {

@@ -66,13 +66,16 @@ Managed casks:
 - `1password`
 - `cyberduck`
 - `discord`
+- `dockdoor`
 - `figma`
 - `ghostty`
 - `github`
+- `hyperkey`
 - `obsidian`
 - `ollama`
 - `shottr`
 - `slack`
+- `typewhisper/tap/typewhisper`
 - `xykong/tap/flux-markdown`
 
 Custom Homebrew taps are pinned through flake inputs via `nix-homebrew`, so tap

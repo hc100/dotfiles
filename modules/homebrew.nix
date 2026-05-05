@@ -17,10 +17,13 @@
       "figma"
       "ghostty"
       "github"
+      "dockdoor"
+      "hyperkey"
       "obsidian"
       "ollama"
       "shottr"
       "slack"
+      "typewhisper/tap/typewhisper"
       "xykong/tap/flux-markdown"
     ];
   };

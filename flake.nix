@@ -21,6 +21,11 @@
       flake = false;
     };
 
+    typewhisper-tap = {
+      url = "github:TypeWhisper/homebrew-tap";
+      flake = false;
+    };
+
   };
 
   outputs =
@@ -30,6 +35,7 @@
       home-manager,
       nix-darwin,
       nix-homebrew,
+      typewhisper-tap,
       xykong-tap,
       ...
     }:
@@ -61,6 +67,7 @@
                 user = username;
                 autoMigrate = true;
                 taps = {
+                  "typewhisper/homebrew-tap" = typewhisper-tap;
                   "xykong/homebrew-tap" = xykong-tap;
                 };
               };
