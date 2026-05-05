@@ -1,6 +1,11 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
+  goimportsOnly = pkgs.runCommand "goimports-only" { } ''
+    mkdir -p "$out/bin"
+    ln -s ${pkgs.gotools}/bin/goimports "$out/bin/goimports"
+  '';
+
   emacsFiles = [
     "early-init.el"
     "init.el"
@@ -28,6 +33,20 @@ in
   programs.emacs = {
     enable = true;
   };
+
+  home.packages = with pkgs; [
+    copilot-language-server
+    eslint_d
+    gopls
+    goimportsOnly
+    intelephense
+    nil
+    prettier
+    rust-analyzer
+    typescript
+    typescript-language-server
+    vscode-langservers-extracted
+  ];
 
   home.file = managedEmacsFiles // {
     ".emacs.d/elisp/go-autocomplete.el".source = ../elisp/go-autocomplete.el;

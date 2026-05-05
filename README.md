@@ -23,6 +23,11 @@ Managed:
 - `~/.emacs.d/early-init.el`
 - `~/.emacs.d/elisp/go-autocomplete.el`
 
+Home Manager also installs the external tools used by the Emacs configuration,
+including Copilot Language Server, Intelephense, gopls, rust-analyzer,
+typescript-language-server, vscode-langservers-extracted, eslint_d, prettier,
+goimports, and nil.
+
 ## Zsh
 
 Home Manager manages zsh, oh-my-zsh, and Powerlevel10k. The Powerlevel10k
