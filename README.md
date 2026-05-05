@@ -63,6 +63,16 @@ set to `none`.
 
 Managed casks:
 
+- `1password`
+- `cyberduck`
+- `discord`
+- `figma`
+- `ghostty`
+- `github`
+- `obsidian`
+- `ollama`
+- `shottr`
+- `slack`
 - `xykong/tap/flux-markdown`
 
 Custom Homebrew taps are pinned through flake inputs via `nix-homebrew`, so tap

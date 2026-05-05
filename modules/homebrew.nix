@@ -11,6 +11,16 @@
     };
 
     casks = [
+      "1password"
+      "cyberduck"
+      "discord"
+      "figma"
+      "ghostty"
+      "github"
+      "obsidian"
+      "ollama"
+      "shottr"
+      "slack"
       "xykong/tap/flux-markdown"
     ];
   };
