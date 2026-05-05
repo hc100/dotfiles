@@ -1,6 +1,10 @@
 { pkgs, username, ... }:
 
 {
+  imports = [
+    ./modules/homebrew.nix
+  ];
+
   nix = {
     settings = {
       experimental-features = [
@@ -52,7 +56,4 @@
       };
     };
   };
-
-  # GUI apps remain intentionally outside Nix for now. Add Homebrew/casks here
-  # later if you decide to let nix-darwin manage them.
 }

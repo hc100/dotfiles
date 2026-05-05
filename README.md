@@ -7,7 +7,7 @@ Nix, Home Manager, and nix-darwin based macOS environment configuration.
 - CLI packages: Nix/Home Manager
 - User dotfiles: Home Manager
 - macOS defaults: nix-darwin
-- GUI apps: Homebrew/manual for now
+- GUI apps: Homebrew via nix-darwin allowlist
 - 1Password CLI: Homebrew/app install, not Nix-managed
 - Secrets and SSH private keys: never committed
 
@@ -46,6 +46,16 @@ Not managed:
 - `~/.emacs.d/straight`
 - `~/.emacs.d/eln-cache`
 - histories, caches, LSP state, and native local binaries
+
+## Homebrew
+
+nix-darwin manages only explicitly listed Homebrew packages. Existing unlisted
+Homebrew packages are left untouched because `homebrew.onActivation.cleanup` is
+set to `none`.
+
+Managed casks:
+
+- `xykong/tap/flux-markdown`
 
 ## First Setup
 
