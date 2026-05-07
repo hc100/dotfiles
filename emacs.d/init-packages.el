@@ -15,9 +15,27 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(straight-use-package '(jsonrpc :type built-in))
+(straight-use-package '(eglot :type built-in))
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 (require 'use-package)
+
+(defun my/remove-straight-bundled-library (package-name)
+  "Prefer the Emacs bundled PACKAGE-NAME over a straight-built copy."
+  (let ((pattern
+         (format "/straight/\\(?:build\\|repos\\)/%s/?\\'" (regexp-quote package-name))))
+    (setq load-path
+          (delq nil
+                (mapcar (lambda (dir)
+                          (unless (string-match-p pattern dir)
+                            dir))
+                        load-path)))))
+
+(dolist (package-name '("jsonrpc" "eglot"))
+  (my/remove-straight-bundled-library package-name))
+
+(require 'jsonrpc)
 
 ;;--------------------------------------------------------------------------------
 ;; macOS の環境変数: PATHは自前で管理し、それ以外だけ取り込む

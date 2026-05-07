@@ -40,6 +40,7 @@
       gcc
       gh
       git
+      git-lfs
       gnupg
       go
       imagemagick
@@ -53,11 +54,13 @@
       qpdf
       ripgrep
       silver-searcher
+      (pkgs.callPackage ./packages/speca-cli.nix { })
       tbls
       texinfo
       tfenv
       tree
       tree-sitter
+      uv
       wget
       yarn
     ];

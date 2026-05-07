@@ -106,6 +106,10 @@ async function main() {
       name: "dev-browser",
       nixFile: "packages/dev-browser.nix",
     }),
+    await checkNpmPackage({
+      name: "speca-cli",
+      nixFile: "packages/speca-cli.nix",
+    }),
     await checkGitHubHead({
       name: "awsp",
       nixFile: "packages/awsp.nix",

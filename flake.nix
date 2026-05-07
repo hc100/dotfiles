@@ -90,6 +90,8 @@
       packages.${system} = {
         awsp = pkgs.callPackage ./packages/awsp.nix { };
         dev-browser = pkgs.callPackage ./packages/dev-browser.nix { };
+        emacs-lolipop = pkgs.callPackage ./packages/emacs-lolipop.nix { };
+        speca-cli = pkgs.callPackage ./packages/speca-cli.nix { };
       };
 
       darwinConfigurations = {

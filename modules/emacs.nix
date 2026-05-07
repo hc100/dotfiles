@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 let
+  emacsPackage = pkgs.callPackage ../packages/emacs-lolipop.nix { };
+
   goimportsOnly = pkgs.runCommand "goimports-only" { } ''
     mkdir -p "$out/bin"
     ln -s ${pkgs.gotools}/bin/goimports "$out/bin/goimports"
@@ -30,12 +32,9 @@ let
   );
 in
 {
-  programs.emacs = {
-    enable = true;
-  };
-
   home.packages = with pkgs; [
     copilot-language-server
+    emacsPackage
     eslint_d
     gopls
     goimportsOnly

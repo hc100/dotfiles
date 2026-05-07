@@ -48,7 +48,7 @@ jobs:
         run: nix flake check
 
       - name: Build pinned packages
-        run: nix build .#awsp .#dev-browser
+        run: nix build .#awsp .#dev-browser .#speca-cli
 
       - name: Build work-macbook system
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.full_build }}

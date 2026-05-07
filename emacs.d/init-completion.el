@@ -71,9 +71,28 @@
 ;;--------------------------------------------------------------------------------
 ;; copilot
 ;;--------------------------------------------------------------------------------
+(defun my/copilot-disable-non-file-buffers ()
+  (not buffer-file-name))  ;; ファイル訪問じゃなければ無効
+
+(defun my/copilot-disable-star-buffers ()
+  "Disable Copilot for *scratch*, *Messages*, and other *foo* buffers."
+  (string-match-p "^\\*.*\\*$" (buffer-name)))
+
+(defun my/copilot-disable-large-buffers ()
+  "Disable Copilot before it warns about buffers over `copilot-max-char'."
+  (and (boundp 'copilot-max-char)
+       (> (buffer-size) copilot-max-char)))
+
+(defun my/copilot-enable-if-supported ()
+  "Enable Copilot only for buffers where it can provide completions quietly."
+  (unless (or (my/copilot-disable-non-file-buffers)
+              (my/copilot-disable-star-buffers)
+              (my/copilot-disable-large-buffers))
+    (copilot-mode 1)))
+
 (use-package copilot
   :delight copilot-mode
-  :hook (prog-mode . copilot-mode)
+  :hook (prog-mode . my/copilot-enable-if-supported)
   :bind (:map copilot-completion-map
               ("<tab>"     . copilot-accept-completion)
               ("TAB"       . copilot-accept-completion)
@@ -83,17 +102,9 @@
 (when-let ((copilot-language-server (executable-find "copilot-language-server")))
   (setq copilot-server-executable copilot-language-server))
 
-(defun my/copilot-disable-non-file-buffers ()
-  (not buffer-file-name))  ;; ファイル訪問じゃなければ無効
-
 (with-eval-after-load 'copilot
-  (add-to-list 'copilot-disable-predicates #'my/copilot-disable-non-file-buffers))
-
-(defun my/copilot-disable-star-buffers ()
-  "Disable Copilot for *scratch*, *Messages*, and other *foo* buffers."
-  (string-match-p "^\\*.*\\*$" (buffer-name)))
-
-(with-eval-after-load 'copilot
+  (add-to-list 'copilot-disable-predicates #'my/copilot-disable-non-file-buffers)
+  (add-to-list 'copilot-disable-predicates #'my/copilot-disable-large-buffers)
   (add-to-list 'copilot-disable-predicates #'my/copilot-disable-star-buffers))
 
 ;;--------------------------------------------------------------------------------
