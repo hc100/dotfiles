@@ -1,22 +1,16 @@
-name: Nix update
+name: Pinact update
 
 on:
   schedule:
-    - cron: "0 19 * * 1"
+    - cron: "0 19 * * 2"
   workflow_dispatch:
-    inputs:
-      full_build:
-        description: "Build the work-macbook darwin system after updating"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: write
   pull-requests: write
 
 concurrency:
-  group: nix-update
+  group: pinact-update
   cancel-in-progress: false
 
 jobs:
@@ -35,34 +29,25 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
-      - name: Check pinned package updates
-        run: node scripts/check-nix-package-updates.mjs
+      - name: Update pinned actions
+        run: nix run --inputs-from . nixpkgs#pinact -- run --update --min-age 7
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          MIN_RELEASE_AGE_DAYS: "7"
 
-      - name: Update flake lock
-        run: nix flake update
+      - name: Verify pinned actions
+        run: nix run --inputs-from . nixpkgs#pinact -- run --check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Check flake
-        run: nix flake check
-
-      - name: Build pinned packages
-        run: nix build .#awsp .#dev-browser
-
-      - name: Build work-macbook system
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full_build }}
-        run: nix build .#darwinConfigurations.work-macbook.system
-
-      - name: Create flake update PR
+      - name: Create pinact update PR
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH_NAME: codex/nix-flake-update
+          BRANCH_NAME: codex/pinact-update
         run: |
           set -euo pipefail
 
-          if git diff --quiet -- flake.lock; then
-            echo "flake.lock is already up to date."
+          if git diff --quiet -- .github/workflows; then
+            echo "GitHub Actions are already up to date."
             exit 0
           fi
 
@@ -70,29 +55,27 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git checkout -B "$BRANCH_NAME"
-          git add flake.lock
-          git commit -m "Update flake lock"
+          git add .github/workflows
+          git commit -m "Update pinned GitHub Actions"
           git push --force-with-lease origin "$BRANCH_NAME"
 
           body="$(cat <<'BODY'
-          Automated Nix flake lock update.
+          Automated GitHub Actions pin update.
 
           Validation:
-          - `nix flake check`
-
-          For manual runs with `full_build=true`, the workflow also builds:
-          - `nix build .#darwinConfigurations.work-macbook.system`
+          - `pinact run --update --min-age 7`
+          - `pinact run --check`
           BODY
           )"
 
           if gh pr view "$BRANCH_NAME" >/dev/null 2>&1; then
             gh pr edit "$BRANCH_NAME" \
-              --title "Update flake lock" \
+              --title "Update pinned GitHub Actions" \
               --body "$body"
           else
             gh pr create \
               --base main \
               --head "$BRANCH_NAME" \
-              --title "Update flake lock" \
+              --title "Update pinned GitHub Actions" \
               --body "$body"
           fi
