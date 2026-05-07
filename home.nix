@@ -32,6 +32,7 @@
       bat
       phpPackages.composer
       curl
+      (pkgs.callPackage ./packages/dev-browser.nix { })
       direnv
       fd
       ffmpeg
