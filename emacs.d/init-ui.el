@@ -31,7 +31,7 @@
                     :background "#1F1F1F")
 
 ;; 背景の透明度（GUIのみ）
-(defvar my/frame-opacity 95)
+(defvar my/frame-opacity 85)
 (defvar my/frame-opacity-setting `(alpha . (,my/frame-opacity . ,my/frame-opacity)))
 
 (defun my/apply-frame-opacity (&optional frame)
