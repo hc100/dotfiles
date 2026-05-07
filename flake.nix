@@ -41,6 +41,9 @@
     }:
     let
       system = "aarch64-darwin";
+      pkgs = import nixpkgs {
+        inherit system;
+      };
 
       mkDarwinConfiguration =
         {
@@ -84,6 +87,11 @@
         };
     in
     {
+      packages.${system} = {
+        awsp = pkgs.callPackage ./packages/awsp.nix { };
+        dev-browser = pkgs.callPackage ./packages/dev-browser.nix { };
+      };
+
       darwinConfigurations = {
         hc100-macbook = mkDarwinConfiguration {
           hostname = "hc100-macbook";

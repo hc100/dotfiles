@@ -1,0 +1,98 @@
+name: Nix update
+
+on:
+  schedule:
+    - cron: "0 19 * * 1"
+  workflow_dispatch:
+    inputs:
+      full_build:
+        description: "Build the work-macbook darwin system after updating"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: nix-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Check pinned package updates
+        run: node scripts/check-nix-package-updates.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MIN_RELEASE_AGE_DAYS: "7"
+
+      - name: Update flake lock
+        run: nix flake update
+
+      - name: Check flake
+        run: nix flake check
+
+      - name: Build pinned packages
+        run: nix build .#awsp .#dev-browser
+
+      - name: Build work-macbook system
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.full_build }}
+        run: nix build .#darwinConfigurations.work-macbook.system
+
+      - name: Create flake update PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH_NAME: codex/nix-flake-update
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- flake.lock; then
+            echo "flake.lock is already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B "$BRANCH_NAME"
+          git add flake.lock
+          git commit -m "Update flake lock"
+          git push --force-with-lease origin "$BRANCH_NAME"
+
+          body="$(cat <<'BODY'
+          Automated Nix flake lock update.
+
+          Validation:
+          - `nix flake check`
+
+          For manual runs with `full_build=true`, the workflow also builds:
+          - `nix build .#darwinConfigurations.work-macbook.system`
+          BODY
+          )"
+
+          if gh pr view "$BRANCH_NAME" >/dev/null 2>&1; then
+            gh pr edit "$BRANCH_NAME" \
+              --title "Update flake lock" \
+              --body "$body"
+          else
+            gh pr create \
+              --base main \
+              --head "$BRANCH_NAME" \
+              --title "Update flake lock" \
+              --body "$body"
+          fi
