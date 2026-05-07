@@ -18,6 +18,25 @@
     enableCompletion = true;
     syntaxHighlighting.enable = true;
 
+    envExtra = ''
+      export NVM_DIR="$HOME/.nvm"
+
+      # Keep the default nvm Node available in non-interactive zsh without
+      # sourcing nvm.sh on every shell startup.
+      if [[ -r "$NVM_DIR/alias/default" ]]; then
+        nvm_default_version="$(<"$NVM_DIR/alias/default")"
+        nvm_default_version="''${nvm_default_version%%[[:space:]]*}"
+
+        if [[ "$nvm_default_version" != "system" ]] \
+          && [[ -d "$NVM_DIR/versions/node/$nvm_default_version/bin" ]]; then
+          typeset -U path
+          path=("$NVM_DIR/versions/node/$nvm_default_version/bin" $path)
+        fi
+
+        unset nvm_default_version
+      fi
+    '';
+
     oh-my-zsh = {
       enable = true;
       plugins = [
@@ -40,6 +59,10 @@
     };
 
     initContent = ''
+      if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+        source "$NVM_DIR/nvm.sh"
+      fi
+
       if [[ -r "$HOME/.p10k.zsh" ]]; then
         source "$HOME/.p10k.zsh"
       fi
