@@ -25,18 +25,40 @@
     };
 
     packages = with pkgs; [
+      act
+      automake
+      awscli2
+      (pkgs.callPackage ./packages/awsp.nix { })
       bat
+      phpPackages.composer
       curl
       direnv
       fd
+      ffmpeg
       fzf
+      gcc
       gh
       git
+      gnupg
+      go
+      imagemagick
       jq
+      mariadb.client
+      mkcert
       nodejs_24
+      oath-toolkit
+      pinact
+      pkgconf
+      qpdf
       ripgrep
+      silver-searcher
+      tbls
+      texinfo
+      tfenv
       tree
+      tree-sitter
       wget
+      yarn
     ];
   };
 

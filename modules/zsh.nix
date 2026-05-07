@@ -56,6 +56,7 @@
       ll = "ls -la";
       g = "git";
       gs = "git status --short";
+      awsp = "source _awsp";
     };
 
     initContent = ''

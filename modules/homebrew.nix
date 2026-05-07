@@ -20,7 +20,7 @@
       "dockdoor"
       "hyperkey"
       "obsidian"
-      "ollama"
+      "ollama-app"
       "shottr"
       "slack"
       "typewhisper/tap/typewhisper"
