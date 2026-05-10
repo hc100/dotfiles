@@ -71,6 +71,7 @@ Managed casks:
 - `ghostty`
 - `github`
 - `hyperkey`
+- `netnewswire`
 - `obsidian`
 - `ollama-app`
 - `shottr`

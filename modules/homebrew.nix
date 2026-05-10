@@ -19,6 +19,7 @@
       "github"
       "dockdoor"
       "hyperkey"
+      "netnewswire"
       "obsidian"
       "ollama-app"
       "shottr"
