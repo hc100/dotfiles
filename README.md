@@ -64,6 +64,7 @@ set to `none`.
 Managed casks:
 
 - `1password`
+- `1password-cli`
 - `cyberduck`
 - `discord`
 - `dockdoor`
@@ -74,6 +75,9 @@ Managed casks:
 - `netnewswire`
 - `obsidian`
 - `ollama-app`
+- `moom`
+- `rar`
+- `session-manager-plugin`
 - `shottr`
 - `slack`
 - `typewhisper/tap/typewhisper`
