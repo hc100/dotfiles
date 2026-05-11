@@ -21,6 +21,7 @@
       builtins.elem (lib.getName pkg) [
         "copilot-language-server"
         "intelephense"
+        "terraform"
       ];
   };
 

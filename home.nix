@@ -57,7 +57,7 @@
       (pkgs.callPackage ./packages/speca-cli.nix { })
       tbls
       texinfo
-      tfenv
+      terraform
       tree
       tree-sitter
       uv
