@@ -44,6 +44,7 @@
       git-lfs
       gnupg
       go
+      golangci-lint
       imagemagick
       jq
       mariadb.client
