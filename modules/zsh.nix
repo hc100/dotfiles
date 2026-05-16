@@ -21,6 +21,16 @@
     envExtra = ''
       export NVM_DIR="$HOME/.nvm"
 
+      # Fall back to the launchd ssh-agent socket when the configured
+      # SSH_AUTH_SOCK is missing or stale.
+      if [[ -z "$SSH_AUTH_SOCK" || ! -S "$SSH_AUTH_SOCK" ]]; then
+        if command -v launchctl >/dev/null 2>&1; then
+          _sock=$(launchctl getenv SSH_AUTH_SOCK 2>/dev/null)
+          [[ -n "$_sock" && -S "$_sock" ]] && export SSH_AUTH_SOCK="$_sock"
+          unset _sock
+        fi
+      fi
+
       # Keep the default nvm Node available in non-interactive zsh without
       # sourcing nvm.sh on every shell startup.
       if [[ -r "$NVM_DIR/alias/default" ]]; then
