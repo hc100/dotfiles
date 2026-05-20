@@ -66,6 +66,12 @@ resolved from tapped definitions instead of Homebrew's cask JSON API. This keeps
 activation away from transient API schema issues while automatic updates remain
 disabled.
 
+Because the default `homebrew/cask` tap is not checked out, Homebrew Bundle may
+print `Installing ...` for managed casks on every activation when this API
+workaround is active. This is an accepted tradeoff: it avoids activation failure
+from Homebrew 5.1.x cask API parsing issues, and has not meaningfully affected
+activation time in normal use.
+
 Managed casks:
 
 - `1password`
