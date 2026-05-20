@@ -56,15 +56,7 @@ jobs:
           secrets.
 
           ```sh
-          git switch main
-          git pull --ff-only
-          git switch -c codex/pinact-update
-          nix run --inputs-from . nixpkgs#pinact -- run --update --min-age 7
-          nix run --inputs-from . nixpkgs#pinact -- run --check
-          git add .github/workflows
-          git commit -m "Update pinned GitHub Actions"
-          git push -u origin codex/pinact-update
-          gh pr create --base main --head codex/pinact-update --title "Update pinned GitHub Actions"
+          scripts/create-pinact-update-pr
           ```
           BODY
 
