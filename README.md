@@ -61,6 +61,11 @@ nix-darwin manages only explicitly listed Homebrew packages. Existing unlisted
 Homebrew packages are left untouched because `homebrew.onActivation.cleanup` is
 set to `none`.
 
+Activation runs `brew bundle` with `HOMEBREW_NO_INSTALL_FROM_API=1` so casks are
+resolved from tapped definitions instead of Homebrew's cask JSON API. This keeps
+activation away from transient API schema issues while automatic updates remain
+disabled.
+
 Managed casks:
 
 - `1password`
