@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: pinact-update
@@ -39,10 +38,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Create pinact update PR
-        env:
-          GH_TOKEN: ${{ github.token }}
-          BRANCH_NAME: codex/pinact-update
+      - name: Report manual pinact update
         run: |
           set -euo pipefail
 
@@ -51,31 +47,26 @@ jobs:
             exit 0
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cat <<'BODY' | tee "$GITHUB_STEP_SUMMARY"
+          ## Manual pinact update required
 
-          git checkout -B "$BRANCH_NAME"
+          pinact found updates under `.github/workflows`. GitHub Actions' default
+          token cannot push workflow file changes, so create the update PR from a
+          local checkout instead of storing a workflow-update token in repository
+          secrets.
+
+          ```sh
+          git switch main
+          git pull --ff-only
+          git switch -c codex/pinact-update
+          nix run --inputs-from . nixpkgs#pinact -- run --update --min-age 7
+          nix run --inputs-from . nixpkgs#pinact -- run --check
           git add .github/workflows
           git commit -m "Update pinned GitHub Actions"
-          git push --force-with-lease origin "$BRANCH_NAME"
-
-          body="$(cat <<'BODY'
-          Automated GitHub Actions pin update.
-
-          Validation:
-          - `pinact run --update --min-age 7`
-          - `pinact run --check`
+          git push -u origin codex/pinact-update
+          gh pr create --base main --head codex/pinact-update --title "Update pinned GitHub Actions"
+          ```
           BODY
-          )"
 
-          if gh pr view "$BRANCH_NAME" >/dev/null 2>&1; then
-            gh pr edit "$BRANCH_NAME" \
-              --title "Update pinned GitHub Actions" \
-              --body "$body"
-          else
-            gh pr create \
-              --base main \
-              --head "$BRANCH_NAME" \
-              --title "Update pinned GitHub Actions" \
-              --body "$body"
-          fi
+          git diff -- .github/workflows
+          exit 1
