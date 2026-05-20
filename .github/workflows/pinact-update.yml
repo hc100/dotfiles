@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0
+          token: ${{ secrets.WORKFLOW_UPDATE_TOKEN }}
 
       - name: Install Nix
         uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
@@ -41,7 +42,7 @@ jobs:
 
       - name: Create pinact update PR
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.WORKFLOW_UPDATE_TOKEN }}
           BRANCH_NAME: codex/pinact-update
         run: |
           set -euo pipefail
