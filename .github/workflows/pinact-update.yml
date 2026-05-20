@@ -56,9 +56,11 @@ jobs:
           secrets.
 
           ```sh
+          gh auth status
           git switch main
           git pull --ff-only
           git switch -c codex/pinact-update
+          export GITHUB_TOKEN="$(gh auth token)"
           nix run --inputs-from . nixpkgs#pinact -- run --update --min-age 7
           nix run --inputs-from . nixpkgs#pinact -- run --check
           git add .github/workflows
