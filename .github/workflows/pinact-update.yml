@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
@@ -56,17 +56,7 @@ jobs:
           secrets.
 
           ```sh
-          gh auth status
-          git switch main
-          git pull --ff-only
-          git switch -c codex/pinact-update
-          export GITHUB_TOKEN="$(gh auth token)"
-          nix run --inputs-from . nixpkgs#pinact -- run --update --min-age 7
-          nix run --inputs-from . nixpkgs#pinact -- run --check
-          git add .github/workflows
-          git commit -m "Update pinned GitHub Actions"
-          git push -u origin codex/pinact-update
-          gh pr create --base main --head codex/pinact-update --title "Update pinned GitHub Actions"
+          scripts/create-pinact-update-pr
           ```
           BODY
 

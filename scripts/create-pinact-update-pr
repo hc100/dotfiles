@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+base_branch="${BASE_BRANCH:-main}"
+update_branch="${UPDATE_BRANCH:-codex/pinact-update}"
+min_age_days="${MIN_AGE_DAYS:-7}"
+pr_title="${PR_TITLE:-Update pinned GitHub Actions}"
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+require_command() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    echo "error: required command not found: $1" >&2
+    exit 1
+  fi
+}
+
+ensure_clean_worktree() {
+  if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "error: working tree has uncommitted changes" >&2
+    git status --short
+    exit 1
+  fi
+}
+
+render_updates() {
+  git diff --unified=0 "$base_branch..HEAD" -- .github/workflows |
+    awk '
+      /^diff --git / {
+        file=$4
+        sub(/^b\//, "", file)
+      }
+      /^- *uses: / {
+        old=$0
+        sub(/^- *uses: */, "", old)
+        old_action=old
+        sub(/@.*/, "", old_action)
+        old_label=old
+        if (old_label ~ /#/) {
+          sub(/^.*# */, "", old_label)
+        } else {
+          sub(/^.*@/, "", old_label)
+          sub(/ .*/, "", old_label)
+          old_label=substr(old_label, 1, 12)
+        }
+      }
+      /^\+ *uses: / {
+        new=$0
+        sub(/^\+ *uses: */, "", new)
+        new_action=new
+        sub(/@.*/, "", new_action)
+        new_label=new
+        if (new_label ~ /#/) {
+          sub(/^.*# */, "", new_label)
+        } else {
+          sub(/^.*@/, "", new_label)
+          sub(/ .*/, "", new_label)
+          new_label=substr(new_label, 1, 12)
+        }
+
+        if (old_action == new_action) {
+          print "- `" file "`: `" new_action "` " old_label " -> " new_label
+        } else {
+          print "- `" file "`: `" old_action "` " old_label " -> `" new_action "` " new_label
+        }
+      }
+    ' | sort
+}
+
+write_pr_body() {
+  local body_file="$1"
+  local updates
+  updates="$(render_updates)"
+
+  {
+    echo "## Summary"
+    echo "- Update pinned GitHub Actions"
+    echo
+    echo "## Updates"
+    if [[ -n "$updates" ]]; then
+      printf '%s\n' "$updates"
+    else
+      echo "- See workflow diff."
+    fi
+    echo
+    echo "## Validation"
+    echo "- \`pinact run --update --min-age $min_age_days\`"
+    echo "- \`pinact run --check\`"
+  } >"$body_file"
+}
+
+require_command gh
+require_command git
+require_command nix
+
+ensure_clean_worktree
+gh auth status >/dev/null
+export GITHUB_TOKEN="${GITHUB_TOKEN:-$(gh auth token)}"
+
+git fetch origin "$base_branch"
+git switch "$base_branch"
+git pull --ff-only origin "$base_branch"
+
+if git show-ref --verify --quiet "refs/heads/$update_branch"; then
+  git branch -D "$update_branch"
+fi
+
+git switch -c "$update_branch"
+
+nix run --inputs-from . nixpkgs#pinact -- run --update --min-age "$min_age_days"
+nix run --inputs-from . nixpkgs#pinact -- run --check
+
+if git diff --quiet -- .github/workflows; then
+  echo "GitHub Actions are already up to date."
+  exit 0
+fi
+
+git add .github/workflows
+git commit -m "$pr_title"
+
+body_file="$(mktemp)"
+trap 'rm -f "$body_file"' EXIT
+write_pr_body "$body_file"
+
+git push --force-with-lease -u origin "$update_branch"
+
+if gh pr view "$update_branch" >/dev/null 2>&1; then
+  gh pr edit "$update_branch" \
+    --title "$pr_title" \
+    --body-file "$body_file"
+else
+  gh pr create \
+    --base "$base_branch" \
+    --head "$update_branch" \
+    --draft \
+    --title "$pr_title" \
+    --body-file "$body_file"
+fi
