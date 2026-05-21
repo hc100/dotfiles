@@ -69,5 +69,6 @@ custom-shader = shaders/ripple_cursor.glsl
 custom-shader = shaders/bloom.glsl
 
 custom-shader = shaders/starfield.glsl
-# custom-shader-animation = true
-custom-shader-animation = always
+# true: フォーカスされているウィンドウでのみアニメーション
+# always: 常にアニメーション
+custom-shader-animation = true
