@@ -50,6 +50,7 @@ in
   ];
 
   home.file = managedEmacsFiles // {
+    "Applications/Emacs.app".source = "${emacsPackage}/Applications/Emacs.app";
     ".emacs.d/elisp/go-autocomplete.el".source = ../elisp/go-autocomplete.el;
   };
 }
