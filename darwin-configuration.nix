@@ -45,6 +45,7 @@
         ApplePressAndHoldEnabled = false;
         InitialKeyRepeat = 15;
         KeyRepeat = 2;
+        "com.apple.trackpad.enableSecondaryClick" = false;
       };
 
       dock = {
@@ -61,7 +62,9 @@
 
       trackpad = {
         Clicking = true;
-        TrackpadThreeFingerDrag = true;
+        TrackpadRightClick = false;
+        TrackpadCornerSecondaryClick = 0;
+        TrackpadThreeFingerDrag = false;
       };
     };
   };
