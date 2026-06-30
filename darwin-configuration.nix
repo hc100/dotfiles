@@ -40,11 +40,6 @@
     primaryUser = username;
     stateVersion = 6;
 
-    activationScripts.postActivation.text = lib.mkAfter ''
-      echo "setting pmset disablesleep..."
-      /usr/bin/pmset -a disablesleep 1
-    '';
-
     defaults = {
       NSGlobalDomain = {
         ApplePressAndHoldEnabled = false;
