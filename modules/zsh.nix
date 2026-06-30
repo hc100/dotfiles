@@ -7,6 +7,7 @@
     "/run/current-system/sw/bin"
     "/etc/profiles/per-user/$USER/bin"
     "/nix/var/nix/profiles/default/bin"
+    "$HOME/bin"
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
   ];

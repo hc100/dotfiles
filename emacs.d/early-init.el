@@ -7,6 +7,7 @@
        (paths (list "/run/current-system/sw/bin"
                     (format "/etc/profiles/per-user/%s/bin" user)
                     "/nix/var/nix/profiles/default/bin"
+                    (expand-file-name "~/bin")
                     "/opt/homebrew/bin"
                     "/opt/homebrew/sbin"))
        (existing (split-string (or (getenv "PATH") "") path-separator t))
