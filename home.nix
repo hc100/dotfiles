@@ -25,6 +25,10 @@
       executable = true;
     };
 
+    activation.createScreenshotsDir = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      run mkdir -p "$HOME/Screenshots"
+    '';
+
     packages = with pkgs; [
       act
       automake

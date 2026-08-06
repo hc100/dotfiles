@@ -4,6 +4,7 @@
   home.file.".p10k.zsh".source = ../p10k.zsh;
 
   home.sessionPath = [
+    "$HOME/.local/share/aquaproj-aqua/bin"
     "/run/current-system/sw/bin"
     "/etc/profiles/per-user/$USER/bin"
     "/nix/var/nix/profiles/default/bin"
@@ -81,6 +82,19 @@
 
       ulimit -n 524288
 
+      # Copy the path of the most recent screenshot to the clipboard.
+      latest_ss() {
+        local dir="$HOME/Screenshots"
+        local -a files
+        files=("$dir"/*(.Nom))
+        if (( ''${#files} == 0 )); then
+          echo "latest_ss: no screenshots found in $dir" >&2
+          return 1
+        fi
+        printf '%s' "''${files[1]}" | pbcopy
+        echo "''${files[1]}"
+      }
+
       if [[ "$TERM_PROGRAM" == "kiro" ]] && command -v kiro >/dev/null 2>&1; then
         . "$(kiro --locate-shell-integration-path zsh)"
       fi
@@ -93,10 +107,11 @@
         export PATH="$HOME/.composer/vendor/bin:$PATH"
       fi
 
-      # Prefer Nix-managed CLI tools over Homebrew while keeping Homebrew
-      # available for GUI/macOS-integrated tools.
+      # Prefer aqua-managed CLIs, then Nix-managed tools over Homebrew while
+      # keeping Homebrew available for GUI/macOS-integrated tools.
       typeset -U path
       path=(
+        $HOME/.local/share/aquaproj-aqua/bin
         /run/current-system/sw/bin
         /etc/profiles/per-user/$USER/bin
         /nix/var/nix/profiles/default/bin
