@@ -31,11 +31,24 @@
   (add-hook 'after-save-hook #'eslint-fix))
 
 ;;--------------------------------------------------------------------------------
-;; Treesit (TypeScript/TSX)
+;; Treesit
 ;;--------------------------------------------------------------------------------
-(setq treesit-language-source-alist
-      '((typescript . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "typescript/src"))
-        (tsx        . ("https://github.com/tree-sitter/tree-sitter-typescript" nil "tsx/src"))))
+(dolist (source
+         '((markdown . ("https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+                        nil "tree-sitter-markdown/src" "/usr/bin/cc" "/usr/bin/c++"
+                        "413285231ce8fa8b11e7074bbe265b48aa7277f9"))
+           (markdown-inline . ("https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+                               nil "tree-sitter-markdown-inline/src" "/usr/bin/cc" "/usr/bin/c++"
+                               "413285231ce8fa8b11e7074bbe265b48aa7277f9"))
+           (typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                          nil "typescript/src" "/usr/bin/cc" "/usr/bin/c++"))
+           (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                   nil "tsx/src" "/usr/bin/cc" "/usr/bin/c++"))))
+  (add-to-list 'treesit-language-source-alist source))
+
+;; Home Manager の GCC が `cc' より先に見つかる環境でも、macOS 用の
+;; grammar dylib は Apple Clang でリンクする。
+
 (add-to-list 'treesit-extra-load-path (expand-file-name "~/.emacs.d/tree-sitter"))
 (add-to-list 'auto-mode-alist '("\\.ts\\'"  . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
