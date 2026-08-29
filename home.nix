@@ -8,6 +8,7 @@
     ./modules/ssh.nix
     ./modules/emacs.nix
     ./modules/ghostty.nix
+    ./modules/herdr.nix
   ];
 
   home = {
