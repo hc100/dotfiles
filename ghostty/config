@@ -54,6 +54,10 @@ window-width=90
 keybind = cmd+shift+bracket_left=next_tab
 keybind = cmd+shift+bracket_right=previous_tab
 keybind = ¥=text:\\
+# Cmd+Shift+↑/↓ は既定で jump_to_prompt に取られ herdr に届かないため unbind して転送する
+# （herdr 側で previous_agent/next_agent に割当。Cmd+↑/↓ 単体の jump_to_prompt は残る）
+keybind = super+shift+arrow_up=unbind
+keybind = super+shift+arrow_down=unbind
 background-opacity = 0.8
 # background-opacity = 0.0
 # background-blur = macos-glass-clear
