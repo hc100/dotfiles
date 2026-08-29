@@ -66,6 +66,8 @@
         TrackpadCornerSecondaryClick = 0;
         TrackpadThreeFingerDrag = false;
       };
+
+      screencapture.location = "~/Screenshots";
     };
   };
 }
