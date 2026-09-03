@@ -40,6 +40,17 @@
     primaryUser = username;
     stateVersion = 6;
 
+    # 電源管理設定（VPN維持と画面ロックを両立させる）
+    activationScripts.postActivation.text = lib.mkAfter ''
+      echo "setting pmset power management..."
+      # AC電源時はシステムスリープを無効化しVPN接続を維持する
+      /usr/bin/pmset -c sleep 0
+      # AC電源時は蓋を閉じてもスリープしない（clamshell運用）
+      /usr/bin/pmset -c disablesleep 1
+      # 全電源で3分後に画面オフ（離席時のセキュリティ確保、システムは眠らせない）
+      /usr/bin/pmset -a displaysleep 3
+    '';
+
     defaults = {
       NSGlobalDomain = {
         ApplePressAndHoldEnabled = false;
