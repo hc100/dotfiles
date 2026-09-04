@@ -99,6 +99,14 @@
         . "$(kiro --locate-shell-integration-path zsh)"
       fi
 
+      # herdr が spawn する claude(復元時の `claude --resume` 含む) を Bedrock で
+      # 動かすため、サブシェル内でのみ Bedrock env を読み込んで herdr を起動する。
+      # env はサーバ起動時に子プロセスへ継承される。対話シェルや素の claude は汚さない。
+      # 秘匿値を含む env は git 管理外の ~/.config/bedrock/env.sh(あれば)から読み込む。
+      herdr() {
+        ( [[ -r "$HOME/.config/bedrock/env.sh" ]] && . "$HOME/.config/bedrock/env.sh"; command herdr "$@" )
+      }
+
       if [ -d "$HOME/.config/composer/vendor/bin" ]; then
         export PATH="$HOME/.config/composer/vendor/bin:$PATH"
       fi

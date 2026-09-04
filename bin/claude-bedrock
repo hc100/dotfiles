@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# Claude Code を Bedrock で起動するラッパー。
+# ARN 等の秘匿値を含む環境変数は git 管理外のローカルファイルから読み込む。
+# 初回は bedrock/env.sh.example を ~/.config/bedrock/env.sh にコピーして値を設定すること。
+env_file="$HOME/.config/bedrock/env.sh"
+if [[ ! -r "$env_file" ]]; then
+  print -u2 "claude-bedrock: $env_file が見つかりません。bedrock/env.sh.example を参考に作成してください。"
+  exit 1
+fi
+. "$env_file"
+
+exec claude "$@"
