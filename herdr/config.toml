@@ -11,6 +11,11 @@ rows = [["state_icon", "workspace"]]
 [ui.sidebar.agents]
 rows = [["state_icon", { token = "tab", bold = true, dim = false, fg = "#ffffff" }], [{ token = "workspace", bold = false, dim = true }]]
 
+# 再起動後もペインのスクロールバック（ターミナル表示履歴）を session-history.json に永続化し復元する。
+# 注意: 履歴にはトークン等の機密が含まれ得るため config/session ディレクトリは端末履歴同様に扱うこと。
+[experimental]
+pane_history = true
+
 [keys]
 previous_tab = "shift+cmd+left"
 next_tab = "shift+cmd+right"
