@@ -91,12 +91,29 @@
         "type": "github"
       }
     },
+    "nixpkgs-gh": {
+      "locked": {
+        "lastModified": 1788311745,
+        "narHash": "sha256-CbDqgXriuI4Alvb0WxyAO4xna9TZYYewpWCjOm8ZWQ4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "583e985cf51f566151e5bc99305070a0f819c15a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "583e985cf51f566151e5bc99305070a0f819c15a",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-gh": "nixpkgs-gh",
         "typewhisper-tap": "typewhisper-tap",
         "xykong-tap": "xykong-tap"
       }
