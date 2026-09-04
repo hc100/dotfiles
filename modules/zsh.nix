@@ -99,6 +99,11 @@
         . "$(kiro --locate-shell-integration-path zsh)"
       fi
 
+      # 一部のツールが必要とする秘匿トークンを env に読み込む。
+      # 実ファイルはトークンを含むため git 管理外(~/.config/secrets/mcp.env)。
+      # 対話シェルで読むことで、そこから起動する claude / herdr サーバ / 復元ペインへ継承される。
+      [[ -r "$HOME/.config/secrets/mcp.env" ]] && . "$HOME/.config/secrets/mcp.env"
+
       # herdr が spawn する claude(復元時の `claude --resume` 含む) を Bedrock で
       # 動かすため、サブシェル内でのみ Bedrock env を読み込んで herdr を起動する。
       # env はサーバ起動時に子プロセスへ継承される。対話シェルや素の claude は汚さない。
