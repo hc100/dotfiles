@@ -4,6 +4,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    # gh の --attach フラグ（gh 2.99.0 以降）を使うため、gh だけ新しい nixpkgs から取得する。
+    # メインの nixpkgs は据え置き、この input は gh の上書き専用。
+    # nixos-unstable チャネルはまだ gh 2.98.0 のため、gh 2.99.0 を含む master コミットに rev 固定する。
+    nixpkgs-gh.url = "github:NixOS/nixpkgs/583e985cf51f566151e5bc99305070a0f819c15a";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -32,6 +37,7 @@
     inputs@{
       self,
       nixpkgs,
+      nixpkgs-gh,
       home-manager,
       nix-darwin,
       nix-homebrew,
@@ -63,6 +69,14 @@
             home-manager.darwinModules.home-manager
             {
               users.users.${username}.home = "/Users/${username}";
+
+              # gh のみ新しい nixpkgs（nixpkgs-gh）へ差し替える overlay。
+              # home-manager.useGlobalPkgs = true のため home.nix の pkgs.gh もこれを参照する。
+              nixpkgs.overlays = [
+                (final: prev: {
+                  gh = nixpkgs-gh.legacyPackages.${system}.gh;
+                })
+              ];
 
               nix-homebrew = {
                 enable = true;
