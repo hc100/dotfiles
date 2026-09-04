@@ -49,6 +49,9 @@
       /usr/bin/pmset -c disablesleep 1
       # 全電源で3分後に画面オフ（離席時のセキュリティ確保、システムは眠らせない）
       /usr/bin/pmset -a displaysleep 3
+      # バッテリー時はシステムスリープが有効なのでディスクスリープも非0にする
+      # （sleep が非0なのに disksleep が0だと pmset が警告を出すため）
+      /usr/bin/pmset -b disksleep 10
     '';
 
     defaults = {
