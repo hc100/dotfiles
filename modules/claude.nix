@@ -13,4 +13,11 @@
     source = ../claude/hooks/herdr-agent-state.sh;
     executable = true;
   };
+
+  # Bedrock 用ラッパー。~/bin は home.sessionPath に含まれるため従来どおり claude-bedrock で起動できる。
+  # ARN 等の秘匿値は git 管理外の ~/.config/bedrock/env.sh から読み込む(bedrock/env.sh.example 参照)。
+  home.file."bin/claude-bedrock" = {
+    source = ../bin/claude-bedrock;
+    executable = true;
+  };
 }

@@ -1,1 +1,4 @@
 result
+
+# Bedrock env はアカウントID等の秘匿値を含むため管理しない（env.sh.example のみ管理）
+bedrock/env.sh
