@@ -37,6 +37,7 @@
       awscli2
       (pkgs.callPackage ./packages/awsp.nix { })
       bat
+      (pkgs.callPackage ./packages/ccusage.nix { })
       phpPackages.composer
       curl
       (pkgs.callPackage ./packages/dev-browser.nix { })
