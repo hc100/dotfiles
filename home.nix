@@ -10,6 +10,7 @@
     ./modules/ghostty.nix
     ./modules/herdr.nix
     ./modules/claude.nix
+    ./modules/copilot.nix
   ];
 
   home = {

@@ -1,6 +1,14 @@
 { ... }:
 
 {
+  # Claude Code の statusLine 用スクリプト。ccusage statusline に渡す前に
+  # Bedrock の application-inference-profile ARN を人間可読なモデル名へ置換する。
+  # settings.json 側で "command": "bash ~/.claude/statusline-ccusage.sh" を指定する。
+  home.file.".claude/statusline-ccusage.sh" = {
+    source = ../claude/statusline-ccusage.sh;
+    executable = true;
+  };
+
   home.file.".claude/hooks/herdr-tab-title.sh" = {
     source = ../claude/hooks/herdr-tab-title.sh;
     executable = true;
