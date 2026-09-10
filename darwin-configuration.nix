@@ -20,6 +20,7 @@
     config.allowUnfreePredicate = pkg:
       builtins.elem (lib.getName pkg) [
         "copilot-language-server"
+        "cursor-cli"
         "intelephense"
         "terraform"
       ];

@@ -11,6 +11,7 @@
     ./modules/herdr.nix
     ./modules/claude.nix
     ./modules/copilot.nix
+    ./modules/cursor.nix
   ];
 
   home = {
@@ -41,6 +42,7 @@
       (pkgs.callPackage ./packages/ccusage.nix { })
       phpPackages.composer
       curl
+      cursor-cli
       (pkgs.callPackage ./packages/dev-browser.nix { })
       direnv
       fd
