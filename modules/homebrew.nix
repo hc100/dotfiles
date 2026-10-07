@@ -40,6 +40,10 @@ in
   # Avoid Homebrew's cask JSON API during nix-darwin activation. Homebrew 5.1.7
   # can fail on empty API macOS dependency entries such as `depends_on macos: {}`.
   system.activationScripts.homebrew.text = lib.mkIf cfg.enable (lib.mkForce ''
+    # mkForce also replaces nix-homebrew's mkBefore hook. Keep its setup so
+    # changes to the pinned Homebrew version are actually installed.
+    ${config.system.activationScripts.setup-homebrew.text}
+
     # Homebrew Bundle
     echo >&2 "Homebrew bundle..."
     if [ -f "${cfg.prefix}/bin/brew" ]; then
