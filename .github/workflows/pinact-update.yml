@@ -61,4 +61,4 @@ jobs:
           BODY
 
           git diff -- .github/workflows
-          exit 1
+          echo "::warning::Pinned GitHub Actions updates are available. Run scripts/create-pinact-update-pr from a local checkout."
