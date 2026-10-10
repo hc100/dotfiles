@@ -90,9 +90,28 @@ jobs:
               --title "Update flake lock" \
               --body "$body"
           else
-            gh pr create \
+            if output="$(gh pr create \
               --base main \
               --head "$BRANCH_NAME" \
               --title "Update flake lock" \
-              --body "$body"
+              --body "$body" 2>&1)"; then
+              printf '%s\n' "$output"
+            else
+              status=$?
+              printf '%s\n' "$output" >&2
+              if [[ "$output" != *"GitHub Actions is not permitted to create or approve pull requests"* ]]; then
+                exit "$status"
+              fi
+
+              pr_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${BRANCH_NAME}?expand=1"
+              {
+                echo "## Manual flake update PR required"
+                echo
+                echo "The updated flake.lock was validated and pushed to \`$BRANCH_NAME\`."
+                echo "GitHub Actions is not permitted to create pull requests in this repository."
+                echo
+                echo "[Create the update pull request]($pr_url), or enable **Allow GitHub Actions to create and approve pull requests** under **Settings → Actions → General → Workflow permissions** to restore automatic PR creation."
+              } >> "$GITHUB_STEP_SUMMARY"
+              echo "::warning::Flake updates were pushed, but a pull request must be created manually: $pr_url"
+            fi
           fi
