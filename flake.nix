@@ -9,6 +9,10 @@
     # nixos-unstable チャネルはまだ gh 2.98.0 のため、gh 2.99.0 を含む master コミットに rev 固定する。
     nixpkgs-gh.url = "github:NixOS/nixpkgs/583e985cf51f566151e5bc99305070a0f819c15a";
 
+    # eMudhra 中間CA漏洩の修正を含む go 1.26.10 を使うため、go だけ master コミットに rev 固定する。
+    # nixos-unstable チャネルに修正版が入ったらこの input と overlay を削除する。
+    nixpkgs-go.url = "github:NixOS/nixpkgs/f90fe9c8e5f774238c31a0241d3b2d84273e9d76";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,6 +42,7 @@
       self,
       nixpkgs,
       nixpkgs-gh,
+      nixpkgs-go,
       home-manager,
       nix-darwin,
       nix-homebrew,
@@ -75,6 +80,8 @@
               nixpkgs.overlays = [
                 (final: prev: {
                   gh = nixpkgs-gh.legacyPackages.${system}.gh;
+                  # go を上書きすると Go 製パッケージが全てソースビルドになるため別名で追加する
+                  go-pinned = nixpkgs-go.legacyPackages.${system}.go;
                 })
               ];
 
