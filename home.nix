@@ -53,7 +53,7 @@
       git
       git-lfs
       gnupg
-      go
+      go-pinned
       golangci-lint
       imagemagick
       jq

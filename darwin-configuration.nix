@@ -32,6 +32,12 @@
 
   programs.zsh.enable = true;
 
+  # eMudhra 中間CA秘密鍵漏洩（2026-10）への対処。nixpkgs の CA バンドルから上位ルートを除外する
+  security.pki.caCertificateBlacklist = [
+    "Comodo AAA Services root"
+    "emSign ECC Root CA - G3"
+  ];
+
   security.pam.services.sudo_local = {
     touchIdAuth = true;
     reattach = true;

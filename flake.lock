@@ -107,6 +107,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-go": {
+      "locked": {
+        "lastModified": 1792737832,
+        "narHash": "sha256-B7E3lGybAeLB7d2gWcWar+pOWnQpv789eQYK+ydh+VI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f90fe9c8e5f774238c31a0241d3b2d84273e9d76",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f90fe9c8e5f774238c31a0241d3b2d84273e9d76",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
@@ -114,6 +130,7 @@
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
         "nixpkgs-gh": "nixpkgs-gh",
+        "nixpkgs-go": "nixpkgs-go",
         "typewhisper-tap": "typewhisper-tap",
         "xykong-tap": "xykong-tap"
       }
