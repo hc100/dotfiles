@@ -23,7 +23,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-homebrew.url = "git+https://github.com/zhaofengli/nix-homebrew";
+    nix-homebrew = {
+      url = "git+https://github.com/zhaofengli/nix-homebrew";
+      # 7.0.4 は cask の `zap :not_required` を解釈できないため上書き
+      inputs.brew-src = {
+        url = "github:Homebrew/brew/7.0.11";
+        flake = false;
+      };
+    };
 
     xykong-tap = {
       url = "github:xykong/homebrew-tap";
