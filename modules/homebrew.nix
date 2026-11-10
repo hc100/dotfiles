@@ -26,7 +26,6 @@ in
       "hyperkey"
       "netnewswire"
       "obsidian"
-      "ollama-app"
       "moom"
       "rar"
       "session-manager-plugin"
